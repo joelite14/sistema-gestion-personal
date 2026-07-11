@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import cors from 'cors';
+import fs from 'fs'; // 👈 NUEVA LÍNEA (solo esta)
 import db from './config/db';
 import personalRoutes from './routes/personalRoutes';
 import reportesRoutes from './routes/reportesRoutes';
@@ -9,6 +10,12 @@ import repososRoutes from './routes/repososRoutes';
 import nivelesRoutes from './routes/nivelesRoutes';
 import dependenciasRoutes from './routes/dependenciasRoutes';
 import authRoutes from './routes/authRoutes';
+
+// 👈 NUEVO BLOQUE (solo esto se agrega)
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+  console.log('📁 Carpeta uploads creada');
+}
 
 
 
