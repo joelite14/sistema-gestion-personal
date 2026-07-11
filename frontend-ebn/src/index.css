@@ -1,0 +1,297 @@
+@import "tailwindcss";
+
+/* Esto es necesario para que Tailwind 4 reconozca tus archivos de React */
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 👇 El login NO debe tener transición de color */
+.login-container {
+  background-color: transparent !important;
+  color-scheme: light;
+  transition: none !important;
+}
+
+/* Transición suave para cambios de tema - EXCLUYENDO el login */
+*:not(.login-container):not(.login-container *) {
+  transition: background-color 0.4s ease-in-out, border-color 0.4s ease, color 0.4s ease;
+}
+
+/* Clases base para modo oscuro */
+.dark {
+  color-scheme: dark;
+}
+
+/* Asegurar que el login mantiene sus colores originales */
+.login-container,
+.login-container * {
+  transition: none !important;
+}
+
+/* ============================================
+   🎯 ANIMACIONES MODERNAS OPTIMIZADAS
+   ============================================ */
+
+/* Fade In + Scale */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Backdrop - Fade simple */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Clases optimizadas */
+.animate-modal {
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-backdrop {
+  animation: backdropFadeIn 0.25s ease-out forwards;
+}
+
+/* Optimización de rendimiento */
+.modal-content {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   🎯 ANIMACIONES DE LOADING - MÁS LENTAS
+   ============================================ */
+
+/* Spin más lento */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Barra de progreso más lenta */
+@keyframes loadingBar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* Pulse más lento */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+/* ============================================
+   🎯 ANIMACIONES DE ENTRADA PARA TARJETAS
+   ============================================ */
+
+/* Tarjetas que aparecen desde abajo */
+@keyframes cardFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================
+   🎯 ANIMACIONES DE ENTRADA PARA TARJETAS - SUPER SUAVE
+   ============================================ */
+
+/* Tarjetas que aparecen con un efecto muy suave */
+@keyframes cardFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Clase para las tarjetas - muy lenta y suave */
+.card-enter {
+  animation: cardFadeInUp 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  opacity: 0;
+}
+
+/* Delays para efecto escalonado - más separados y lentos */
+.delay-0 { animation-delay: 0ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+.delay-900 { animation-delay: 900ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* ============================================
+   🎯 ANIMACIONES DE ENTRADA PARA TABLAS - SUPER SUAVE
+   ============================================ */
+
+/* Filas que aparecen con un efecto muy suave */
+@keyframes rowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Clase para las filas - muy lenta y suave */
+.row-enter {
+  animation: rowFadeIn 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  opacity: 0;
+}
+
+/* Delays para efecto escalonado */
+.delay-0 { animation-delay: 0ms; }
+.delay-60 { animation-delay: 60ms; }
+.delay-120 { animation-delay: 120ms; }
+.delay-180 { animation-delay: 180ms; }
+.delay-240 { animation-delay: 240ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-360 { animation-delay: 360ms; }
+.delay-420 { animation-delay: 420ms; }
+.delay-480 { animation-delay: 480ms; }
+.delay-540 { animation-delay: 540ms; }
+.delay-600 { animation-delay: 600ms; }
+
+/* ============================================
+   🎯 ANIMACIÓN DE BARRA PROGRESIVA - PERSONALIZADA
+   ============================================ */
+
+.bar-animate {
+  animation: fillBarGeneric 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  width: 0%;
+}
+
+@keyframes fillBarGeneric {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* ============================================
+   🎯 ANIMACIÓN DE ENTRADA DEL SISTEMA
+   ============================================ */
+
+@keyframes systemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.system-enter {
+  animation: systemFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ============================================
+   🎯 ANIMACIONES PARA REPORTES
+   ============================================ */
+
+@keyframes cardFadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.card-left-enter {
+  animation: cardFadeInLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.title-enter {
+  animation: titleFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ============================================
+   🎯 ANIMACIÓN PARA MODAL CON PORTAL
+   ============================================ */
+
+@keyframes modalPortalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-portal-enter {
+  animation: modalPortalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ============================================
+   🎯 FORZAR VISIBILIDAD DEL MODAL - SOLO Z-INDEX
+   ============================================ */
+
+.fixed.inset-0.z-\[9999\] {
+  z-index: 9999 !important;
+}
