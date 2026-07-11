@@ -99,20 +99,19 @@ router.post('/personal', async (req, res) => {
 
     console.log("📝 Datos recibidos en POST:", req.body);
 
-   const [result]: any = await db.query(
-  `INSERT INTO personal 
- (cedula, nombres, apellidos, telefono, correo, cargo, cod_cargo, 
-  nivel_academico, dependencia, fecha_ingreso, fecha_nacimiento, edad, estatus,
-  turno, dependencia_actual, dependencia_voucher,
-  rif, rif_fecha, constancia_ubicacion, constancia_ubicacion_fecha,
-  constancia_pago, constancia_pago_fecha,
-  cedula_imagen, cedula_imagen_fecha) 
- VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-  [cedula, nombres, apellidos, telefono, correo, cargo, cod_cargo || null, 
-   nivel_academico, dependencia, fecha_ingreso, fecha_nacimiento || null, edad || null, estatus || 'Activo',
-   turno || null, dependencia_actual || null, dependencia_voucher || null,
-   null, null, null, null, null, null]
-);
+    const [result]: any = await db.query(
+      `INSERT INTO personal 
+       (cedula, nombres, apellidos, telefono, correo, cargo, cod_cargo, 
+        nivel_academico, dependencia, fecha_ingreso, fecha_nacimiento, edad, estatus,
+        turno, dependencia_actual, dependencia_voucher) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        cedula, nombres, apellidos, telefono, correo, cargo, cod_cargo || null,
+        nivel_academico, dependencia, fecha_ingreso, fecha_nacimiento || null, 
+        edad || null, estatus || 'Activo',
+        turno || null, dependencia_actual || null, dependencia_voucher || null
+      ]
+    );
 
     const usuario_id = req.body.usuario_id || 1;
     const usuario_nombre = req.body.usuario_nombre || 'Administrador';
