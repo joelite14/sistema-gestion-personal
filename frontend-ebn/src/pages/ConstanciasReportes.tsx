@@ -4,6 +4,8 @@ import { api } from '../services/api'; // 👈 NUEVA IMPORTACIÓN
 import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 import ReactDOM from 'react-dom';
+import { API_URL } from '../services/api';
+
 
 const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
   const [loading, setLoading] = useState(false);
@@ -28,19 +30,18 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
 
   // ✅ CAMBIADO: Usar api en lugar de axios
   const generarReporteReposos = () => {
-    if (!fechaDesde || !fechaHasta) {
-      toast.error('Selecciona un rango de fechas');
-      return;
-    }
-    setLoading(true);
-    window.open(
-      `http://localhost:3000/api/reportes/reposos-permisos?fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}&tipo=${tipoReporte}`,
-      '_blank'
-    );
-    setTimeout(() => setLoading(false), 1000);
-    setShowRepososModal(false);
-  };
-
+  if (!fechaDesde || !fechaHasta) {
+    toast.error('Selecciona un rango de fechas');
+    return;
+  }
+  setLoading(true);
+  window.open(
+    `${API_URL}/api/reportes/reposos-permisos?fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}&tipo=${tipoReporte}`,
+    '_blank'
+  );
+  setTimeout(() => setLoading(false), 1000);
+  setShowRepososModal(false);
+};
   useEffect(() => {
     fetchDependencias();
   }, []);
@@ -71,26 +72,26 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
   };
 
   const generarReporteGeneral = () => {
-    setLoading(true);
-    window.open('http://localhost:3000/api/reportes/personal-pdf', '_blank');
-    setTimeout(() => setLoading(false), 1000);
-  };
+  setLoading(true);
+  window.open(`${API_URL}/api/reportes/personal-pdf`, '_blank'); 
+  setTimeout(() => setLoading(false), 1000);
+};
 
   const generarReporteRAC = () => {
-    setLoading(true);
-    window.open('http://localhost:3000/api/reportes/rac-excel', '_blank');
-    setTimeout(() => setLoading(false), 1000);
-  };
+  setLoading(true);
+  window.open(`${API_URL}/api/reportes/rac-excel`, '_blank'); // 
+  setTimeout(() => setLoading(false), 1000);
+};
 
   const generarConstancia = () => {
-    if (!selectedEmpleado) {
-      toast.error('Seleccione un empleado');
-      return;
-    }
-    setLoading(true);
-    window.open(`http://localhost:3000/api/reportes/constancia-pdf/${selectedEmpleado}`, '_blank');
-    setTimeout(() => setLoading(false), 1000);
-  };
+  if (!selectedEmpleado) {
+    toast.error('Seleccione un empleado');
+    return;
+  }
+  setLoading(true);
+  window.open(`${API_URL}/api/reportes/constancia-pdf/${selectedEmpleado}`, '_blank'); // 👈 CAMBIADO
+  setTimeout(() => setLoading(false), 1000);
+};
 
   const buscarEmpleados = () => {
     if (busqueda.length < 2) {
@@ -276,8 +277,7 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
               onClick={() => {
                 setLoading(true);
                 window.open(
-                  `http://localhost:3000/api/reportes/personal-por-dependencia?dependencia=${encodeURIComponent(dependenciaSeleccionada)}`,
-                  '_blank'
+                `${API_URL}/api/reportes/personal-por-dependencia?dependencia=${encodeURIComponent(dependenciaSeleccionada)}`                  '_blank'
                 );
                 setTimeout(() => setLoading(false), 1000);
               }}
@@ -406,8 +406,7 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
                     }
                     setLoading(true);
                     window.open(
-                      `http://localhost:3000/api/reportes/reposos-permisos?fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}&tipo=${tipoReporte}`,
-                      '_blank'
+                    `${API_URL}/api/reportes/reposos-permisos?fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}&tipo=${tipoReporte}`                      '_blank'
                     );
                     setTimeout(() => setLoading(false), 1000);
                     setShowRepososModal(false);
@@ -485,8 +484,7 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
                     }
                     setLoading(true);
                     window.open(
-                      `http://localhost:3000/api/reportes/bitacora?fecha_desde=${fechaDesdeBitacora}&fecha_hasta=${fechaHastaBitacora}&usuario=todos`,
-                      '_blank'
+                      `${API_URL}/api/reportes/bitacora?fecha_desde=${fechaDesdeBitacora}&fecha_hasta=${fechaHastaBitacora}&usuario=todos`                      '_blank'
                     );
                     setTimeout(() => setLoading(false), 1000);
                     setShowBitacoraModal(false);
