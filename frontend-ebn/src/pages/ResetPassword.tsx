@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { API_URL } from '../services/api';
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -38,7 +39,7 @@ const ResetPassword = () => {
 
     setLoading(true);
     try {
-      await axios.post('http://localhost:3000/api/auth/reset-password', {
+      await axios.post(`${API_URL}/api/auth/reset-password`, {
         token,
         newPassword
       });

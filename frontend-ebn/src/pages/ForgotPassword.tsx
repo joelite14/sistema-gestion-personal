@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { API_URL } from '../services/api';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -18,12 +19,12 @@ const ForgotPassword = () => {
     }
 
     setLoading(true);
-    setShowModal(true); // 👈 MOSTRAR MODAL
+    setShowModal(true); // 
 
     try {
-      await axios.post('http://localhost:3000/api/auth/forgot-password', { email });
+      await axios.post(`${API_URL}/api/auth/forgot-password`, { email });
       setSent(true);
-      setShowModal(false); // 👈 OCULTAR MODAL
+      setShowModal(false); // 
       toast.success('Revisa tu correo para restablecer tu contraseña');
     } catch (error: any) {
       setShowModal(false); // 👈 OCULTAR MODAL
