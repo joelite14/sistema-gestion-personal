@@ -2,7 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import cors from 'cors';
-import fs from 'fs'; // 👈 NUEVA LÍNEA (solo esta)
+import path from 'path'; 
+import fs from 'fs';
 import db from './config/db';
 import personalRoutes from './routes/personalRoutes';
 import reportesRoutes from './routes/reportesRoutes';
@@ -11,15 +12,11 @@ import nivelesRoutes from './routes/nivelesRoutes';
 import dependenciasRoutes from './routes/dependenciasRoutes';
 import authRoutes from './routes/authRoutes';
 
-// 👈 NUEVO BLOQUE (solo esto se agrega)
+// Crear carpeta uploads si no existe
 if (!fs.existsSync('uploads')) {
   fs.mkdirSync('uploads');
   console.log('📁 Carpeta uploads creada');
 }
-
-
-
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,9 +35,6 @@ app.use('/api', repososRoutes);
 app.use('/api', nivelesRoutes);
 app.use('/api', dependenciasRoutes);
 app.use('/api', authRoutes);
-
-
-
 
 app.get('/', (req, res) => {
   res.send('Servidor de E.B.N. Dr. Vicente Peña funcionando ✅');
@@ -69,7 +63,6 @@ app.post('/api/login', async (req, res) => {
     if (rows.length > 0) {
       const user = rows[0];
 
-      // 📝 REGISTRAR EN BITÁCORA (inicio de sesión)
       try {
         await db.query(
           'INSERT INTO bitacora (usuario_id, usuario_nombre, accion, modulo) VALUES (?, ?, ?, ?)',
@@ -104,9 +97,22 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// --- INICIO DEL SERVIDOR ---
+// ============================================
+// SERVIR EL FRONTEND (para evitar "Not Found" al recargar)
+// ============================================
+const frontendPath = path.join(__dirname, '../../frontend-ebn/dist');
+console.log("📁 Sirviendo frontend desde:", frontendPath);
+
+app.use(express.static(frontendPath));
+
+// Todas las rutas que NO sean API, redirigen al index.html de React
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
+// ============================================
+// INICIO DEL SERVIDOR
+// ============================================
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
-
-app.use('/uploads', express.static('uploads'));
