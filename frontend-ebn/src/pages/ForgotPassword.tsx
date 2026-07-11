@@ -8,7 +8,7 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
-  const [showModal, setShowModal] = useState(false); // 👈 NUEVO
+  const [showModal, setShowModal] = useState(false); // 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
