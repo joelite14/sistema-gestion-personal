@@ -503,45 +503,17 @@ router.get('/usuarios', async (req, res) => {
 
 router.post('/usuarios', async (req, res) => {
   try {
-    console.log("📝 Body recibido:", req.body);
+    const { cedula, email, nombre, password, rol } = req.body;
     
-    const { cedula, email, nombre, usuario, password, rol } = req.body;
-    
-    console.log("📝 Campos:");
-    console.log("  - cedula:", cedula);
-    console.log("  - email:", email);
-    console.log("  - nombre:", nombre);
-    console.log("  - usuario:", usuario);
-    console.log("  - password:", password ? "****" : "undefined");
-    console.log("  - rol:", rol);
-    
-    // Validar campos obligatorios
-    if (!nombre || !usuario || !password) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Faltan campos obligatorios: nombre, usuario y contraseña son requeridos' 
-      });
-    }
+    const usuario = cedula;
     
     const [result]: any = await db.query(
       'INSERT INTO usuarios (cedula, email, nombre, usuario, password, rol) VALUES (?, ?, ?, ?, ?, ?)',
-      [cedula || null, email || null, nombre, usuario, password, rol || 'admin']
+      [cedula, email, nombre, usuario, password, rol || 'admin']
     );
-    
-    console.log("✅ Usuario creado con ID:", result.insertId);
     res.json({ success: true, message: 'Usuario creado', id: result.insertId });
-  } catch (error: any) {
-    console.error("❌ Error al crear usuario:");
-    console.error("  - Mensaje:", error.message);
-    console.error("  - Código:", error.code);
-    
-    if (error.code === 'ER_DUP_ENTRY') {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Ya existe un usuario con esa cédula o nombre de usuario' 
-      });
-    }
-    
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: 'Error al crear usuario' });
   }
 });
