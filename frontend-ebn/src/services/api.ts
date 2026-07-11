@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // 🔥 Obtener la URL base según el entorno
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'; // 👈 AGREGAR "export const"
 
 // 📦 Configurar axios con la URL base
 export const api = axios.create({
