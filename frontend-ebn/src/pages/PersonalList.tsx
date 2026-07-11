@@ -4,6 +4,8 @@ import { api } from '../services/api'; // 👈 NUEVA IMPORTACIÓN
 import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 import ReactDOM from 'react-dom';
+import { API_URL } from '../services/api';
+
 
 const PersonalList = () => {
   const [personal, setPersonal] = useState([]);
@@ -461,7 +463,7 @@ const fetchHistorial = async (personalId: number) => {
               <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center shadow-md overflow-hidden">
                 {emp.foto_url ? (
                   <img 
-                    src={`http://localhost:3000${emp.foto_url}?t=${new Date().getTime()}`}
+                    src={`${API_URL}${emp.foto_url}?t=${new Date().getTime()}`}
                     alt="Foto"
                     className="w-full h-full object-cover"
                   />
@@ -545,7 +547,7 @@ const fetchHistorial = async (personalId: number) => {
               <td className="p-3">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center overflow-hidden">
                   {emp.foto_url ? (
-                    <img src={`http://localhost:3000${emp.foto_url}?t=${new Date().getTime()}`} alt="Foto" className="w-full h-full object-cover" />
+                    <img src={`${API_URL}${emp.foto_url}?t=${new Date().getTime()}`} alt="Foto" className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-white text-xs font-bold">{emp.nombres?.charAt(0).toUpperCase()}</span>
                   )}
@@ -819,7 +821,7 @@ const fetchHistorial = async (personalId: number) => {
                 >
                   {selectedEmployee.foto_url ? (
                     <img 
-                      src={`http://localhost:3000${selectedEmployee.foto_url}?t=${new Date().getTime()}`}
+                      src={`${API_URL}${selectedEmployee.foto_url}?t=${new Date().getTime()}`}
                       alt="Foto"
                       className="w-full h-full object-cover"
                     />
@@ -1051,7 +1053,7 @@ const fetchHistorial = async (personalId: number) => {
     <div className="flex items-center gap-2">
       {selectedEmployee.cedula_imagen ? (
         <>
-          <a href={`http://localhost:3000${selectedEmployee.cedula_imagen}`} target="_blank" className="text-blue-500 hover:underline text-sm">
+          <a href={`${API_URL}${selectedEmployee.cedula_imagen}`} target="_blank">
             Ver
           </a>
           <button 
@@ -1118,7 +1120,7 @@ const fetchHistorial = async (personalId: number) => {
     <div className="flex items-center gap-2">
       {selectedEmployee.rif ? (
         <>
-          <a href={`http://localhost:3000${selectedEmployee.rif}`} target="_blank" className="text-blue-500 hover:underline text-sm">
+          <a href={`${API_URL}${selectedEmployee.rif}`} target="_blank" className="text-blue-500 hover:underline text-sm">
             Ver
           </a>
           <button 
@@ -1185,7 +1187,7 @@ const fetchHistorial = async (personalId: number) => {
     <div className="flex items-center gap-2">
       {selectedEmployee.constancia_pago ? (
         <>
-          <a href={`http://localhost:3000${selectedEmployee.constancia_pago}`} target="_blank" className="text-blue-500 hover:underline text-sm">
+          <a href={`${API_URL}${selectedEmployee.constancia_pago}`} target="_blank" className="text-blue-500 hover:underline text-sm">
             Ver
           </a>
           <button 
@@ -1252,7 +1254,7 @@ const fetchHistorial = async (personalId: number) => {
     <div className="flex items-center gap-2">
       {selectedEmployee.constancia_ubicacion ? (
         <>
-          <a href={`http://localhost:3000${selectedEmployee.constancia_ubicacion}`} target="_blank" className="text-blue-500 hover:underline text-sm">
+          <a href={`${API_URL}${selectedEmployee.constancia_ubicacion}`} target="_blank" className="text-blue-500 hover:underline text-sm">
             Ver
           </a>
           <button 
@@ -1337,7 +1339,7 @@ const fetchHistorial = async (personalId: number) => {
                         <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-400'}`}>{new Date(doc.fecha_subida).toLocaleDateString('es-VE')}</p>
                       </div>
                       <div className="flex gap-2">
-                        <a href={`http://localhost:3000${doc.archivo_url}`} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">📥 Ver</a>
+                        <a href={`${API_URL}${doc.archivo_url}`} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">📥 Ver</a>
                         {isSuperAdmin && (
                           <button onClick={() => handleDeleteDocumento(doc.id)} className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">🗑️ Eliminar</button>
                         )}
@@ -1439,7 +1441,7 @@ const fetchHistorial = async (personalId: number) => {
       </div>
       <div className="flex justify-center">
         <img 
-          src={`http://localhost:3000${selectedEmployee.foto_url}?t=${new Date().getTime()}`}
+          src={`${API_URL}${selectedEmployee.foto_url}?t=${new Date().getTime()}`}
           alt="Foto de perfil"
           className="max-w-full max-h-[70vh] rounded-lg object-contain"
         />
