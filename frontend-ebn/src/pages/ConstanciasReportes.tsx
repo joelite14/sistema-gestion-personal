@@ -277,8 +277,8 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
               onClick={() => {
                 setLoading(true);
                 window.open(
-                `${API_URL}/api/reportes/personal-por-dependencia?dependencia=${encodeURIComponent(dependenciaSeleccionada)}`                  '_blank'
-                );
+                `${API_URL}/api/reportes/personal-por-dependencia?dependencia=${encodeURIComponent(dependenciaSeleccionada)}`,
+                  '_blank');
                 setTimeout(() => setLoading(false), 1000);
               }}
               disabled={loading}
@@ -406,7 +406,8 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
                     }
                     setLoading(true);
                     window.open(
-                    `${API_URL}/api/reportes/reposos-permisos?fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}&tipo=${tipoReporte}`                      '_blank'
+                    `${API_URL}/api/reportes/reposos-permisos?fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}&tipo=${tipoReporte}` ,
+                    '_blank'
                     );
                     setTimeout(() => setLoading(false), 1000);
                     setShowRepososModal(false);
@@ -484,7 +485,8 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
                     }
                     setLoading(true);
                     window.open(
-                      `${API_URL}/api/reportes/bitacora?fecha_desde=${fechaDesdeBitacora}&fecha_hasta=${fechaHastaBitacora}&usuario=todos`                      '_blank'
+                      `${API_URL}/api/reportes/bitacora?fecha_desde=${fechaDesdeBitacora}&fecha_hasta=${fechaHastaBitacora}&usuario=todos`,
+                      '_blank'
                     );
                     setTimeout(() => setLoading(false), 1000);
                     setShowBitacoraModal(false);
