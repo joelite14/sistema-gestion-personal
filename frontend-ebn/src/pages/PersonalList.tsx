@@ -387,7 +387,6 @@ const fetchHistorial = async (personalId: number) => {
       fetchDocumentos(selectedEmployee!.id_personal);
       
       // 🔥 También registrar en bitácora localmente (opcional)
-      // await axios.post(`http://localhost:3000/api/bitacora`, {
       //   usuario_id: userId,
       //   usuario_nombre: userName,
       //   accion: `Eliminó ${tipoDocumento} del empleado ${selectedEmployee?.nombres} ${selectedEmployee?.apellidos}`,
