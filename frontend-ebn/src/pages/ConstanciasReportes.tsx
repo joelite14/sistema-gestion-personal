@@ -179,69 +179,70 @@ const ConstanciasReportes = ({ onVolver }: { onVolver: () => void }) => {
           </div>
 
           {/* Constancia de Trabajo */}
-          <div className={`rounded-xl shadow-lg p-6 border-t-4 border-green-600 transition-all duration-300 hover:scale-[1.02] ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
-            <div className="text-4xl mb-3">📄</div>
-            <h2 className={`text-lg font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-              Constancia de Trabajo
-            </h2>
-            <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-              Generar constancia de trabajo individual para un empleado.
-            </p>
+<div className={`rounded-xl shadow-lg p-6 border-t-4 border-green-600 transition-all duration-300 hover:scale-[1.02] ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+  <div className="text-4xl mb-3">📄</div>
+  <h2 className={`text-lg font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+    Constancia de Trabajo
+  </h2>
+  <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+    Generar constancia de trabajo individual para un empleado.
+  </p>
 
-            <div className="relative mb-4">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Buscar empleado por nombre o cédula..."
-                  className={`flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'
-                  }`}
-                  value={busqueda}
-                  onChange={(e) => {
-                    setBusqueda(e.target.value);
-                    setMostrarLista(false);
-                    setSelectedEmpleado('');
-                  }}
-                />
-                <button
-                  onClick={buscarEmpleados}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-                >
-                  Buscar
-                </button>
-              </div>
+  {/* 🔥 AQUÍ ESTÁ EL CAMBIO */}
+  <div className="relative mb-4">
+    <div className="flex flex-col sm:flex-row gap-2">
+      <input
+        type="text"
+        placeholder="Buscar empleado por nombre o cédula..."
+        className={`flex-1 min-w-[0px] p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'
+        }`}
+        value={busqueda}
+        onChange={(e) => {
+          setBusqueda(e.target.value);
+          setMostrarLista(false);
+          setSelectedEmpleado('');
+        }}
+      />
+      <button
+        onClick={buscarEmpleados}
+        className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 whitespace-nowrap"
+      >
+        Buscar
+      </button>
+    </div>
 
-              {mostrarLista && resultados.length > 0 && (
-                <div className={`absolute z-10 w-full mt-1 border rounded-lg shadow-lg max-h-40 overflow-y-auto ${
-                  isDark ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
-                }`}>
-                  {resultados.map((emp: any) => (
-                    <div
-                      key={emp.id_personal}
-                      onClick={() => seleccionarEmpleado(emp.id_personal, `${emp.nombres} ${emp.apellidos}`)}
-                      className={`p-2 cursor-pointer hover:bg-blue-100 ${isDark ? 'hover:bg-gray-600 text-white' : 'hover:bg-blue-50'}`}
-                    >
-                      {emp.nombres} {emp.apellidos} - {emp.cedula}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {selectedEmpleado && (
-              <div className={`mb-4 p-2 rounded ${isDark ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800'}`}>
-                ✅ Empleado seleccionado
-              </div>
-            )}
-
-            <button
-              onClick={generarConstancia}
-              disabled={loading || !selectedEmpleado}
-              className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
-            >
-              {loading ? '⏳ Generando...' : '📥 Generar Constancia'}
-            </button>
+    {mostrarLista && resultados.length > 0 && (
+      <div className={`absolute z-10 w-full mt-1 border rounded-lg shadow-lg max-h-40 overflow-y-auto ${
+        isDark ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+      }`}>
+        {resultados.map((emp: any) => (
+          <div
+            key={emp.id_personal}
+            onClick={() => seleccionarEmpleado(emp.id_personal, `${emp.nombres} ${emp.apellidos}`)}
+            className={`p-2 cursor-pointer hover:bg-blue-100 ${isDark ? 'hover:bg-gray-600 text-white' : 'hover:bg-blue-50'}`}
+          >
+            {emp.nombres} {emp.apellidos} - {emp.cedula}
           </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {selectedEmpleado && (
+    <div className={`mb-4 p-2 rounded ${isDark ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800'}`}>
+      ✅ Empleado seleccionado
+    </div>
+  )}
+
+  <button
+    onClick={generarConstancia}
+    disabled={loading || !selectedEmpleado}
+    className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+  >
+    {loading ? '⏳ Generando...' : '📥 Generar Constancia'}
+  </button>
+</div>
 
           {/* Reporte por Dependencia */}
           <div className={`rounded-xl shadow-lg p-6 border-t-4 border-orange-500 transition-all duration-300 hover:scale-[1.02] ${isDark ? 'bg-gray-800' : 'bg-white'}`}>

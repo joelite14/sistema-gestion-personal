@@ -21,6 +21,7 @@ if (!fs.existsSync('uploads')) {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middlewares
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -29,6 +30,9 @@ app.use(cors({
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
+// ============================================
+// 📌 1. PRIMERO: RUTAS DE API
+// ============================================
 app.use('/api', personalRoutes);
 app.use('/api', reportesRoutes);
 app.use('/api', repososRoutes);
@@ -36,13 +40,7 @@ app.use('/api', nivelesRoutes);
 app.use('/api', dependenciasRoutes);
 app.use('/api', authRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Servidor de E.B.N. Dr. Vicente Peña funcionando ✅');
-});
-
-// ============================================
-// RUTA DE LOGIN CON BITÁCORA
-// ============================================
+// Ruta de login (ya está definida aquí abajo)
 app.post('/api/login', async (req, res) => {
   const { cedula, password } = req.body;
 
@@ -97,18 +95,36 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Ruta de prueba
+app.get('/', (req, res) => {
+  res.send('Servidor de E.B.N. Dr. Vicente Peña funcionando ✅');
+});
+
 // ============================================
-// SERVIR EL FRONTEND (para evitar "Not Found" al recargar)
+// 📌 2. DESPUÉS: SERVIR EL FRONTEND
 // ============================================
 const frontendPath = path.join(__dirname, '../../frontend-ebn/dist');
 console.log("📁 Sirviendo frontend desde:", frontendPath);
 
-app.use(express.static(frontendPath));
-
-// Todas las rutas que NO sean API, redirigen al index.html de React
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
+// Verificar si existe la carpeta del frontend
+if (!fs.existsSync(frontendPath)) {
+  console.error(`❌ ERROR: No se encontró la carpeta del frontend en: ${frontendPath}`);
+  console.error('   Asegúrate de haber ejecutado "npm run build" en la carpeta frontend-ebn');
+} else {
+  console.log('✅ Frontend encontrado, sirviendo archivos estáticos');
+  app.use(express.static(frontendPath));
+  
+  // Todas las rutas que NO sean API, redirigen al index.html de React
+  app.get('*', (req, res) => {
+    const indexPath = path.join(frontendPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      console.error(`❌ No se encontró index.html en: ${indexPath}`);
+      res.status(404).send('Frontend no construido correctamente');
+    }
+  });
+}
 
 // ============================================
 // INICIO DEL SERVIDOR
