@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { api } from '../services/api'; // 👈 NUEVA IMPORTACIÓN
+import { api } from '../services/api'; 
 import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 import GestionNiveles from '../components/GestionNiveles';
@@ -17,9 +16,7 @@ const GestionPersonal = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [uploadingFoto, setUploadingFoto] = useState(false);
-  const [selectedFotoId, setSelectedFotoId] = useState<number | null>(null);
-  const [importando, setImportando] = useState(false);
+
   const [filtroEstatus, setFiltroEstatus] = useState<'activo' | 'inactivo' | 'jubilado'>('activo');
   const [showEstatusModal, setShowEstatusModal] = useState(false);
   const [empleadoEstatus, setEmpleadoEstatus] = useState<{ id: number, nombre: string } | null>(null);
@@ -36,7 +33,8 @@ const GestionPersonal = () => {
     cargo: '', cod_cargo: '', nivel_academico: '', fecha_ingreso: '', estatus: 'Activo',
     turno: '',           
     dependencia_actual: '',   
-    dependencia_voucher: ''   
+    dependencia_voucher: '' ,
+      
   });
 
   useEffect(() => { fetchPersonal(); }, []);
@@ -172,7 +170,6 @@ const GestionPersonal = () => {
       cargo: emp.cargo || '',
       cod_cargo: codActual,
       nivel_academico: nivelActual,
-      dependencia: emp.dependencia || '', 
       fecha_ingreso: emp.fecha_ingreso ? emp.fecha_ingreso.split('T')[0] : '',
       estatus: emp.estatus || 'Activo',
       turno: emp.turno || '',
@@ -231,33 +228,6 @@ const GestionPersonal = () => {
     }
   };
 
-  const handleSubirFoto = async (id: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    
-    const formData = new FormData();
-    formData.append('foto', file);
-    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-    formData.append('usuario_id', user.id || '1');
-    formData.append('usuario_nombre', user.nombre || 'Administrador');
-    
-    try {
-      setUploadingFoto(true);
-      setSelectedFotoId(id);
-      // ✅ CAMBIADO: Usar api.post con FormData
-      await api.post(`/api/personal/${id}/foto`, formData, { 
-        headers: { 'Content-Type': 'multipart/form-data' } 
-      });
-      toast.success('Foto subida exitosamente');
-      await fetchPersonal();
-    } catch (error) { 
-      toast.error('Error al subir foto');
-    } finally { 
-      setUploadingFoto(false); 
-      setSelectedFotoId(null); 
-      event.target.value = '';
-    }
-  };
 
   const resetForm = () => {
     setFormData({ 
@@ -293,26 +263,26 @@ const GestionPersonal = () => {
 
       <div className={`overflow-x-auto rounded-xl shadow ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
         <table className="min-w-full">
-          <thead className={`${isDark ? 'bg-gray-700' : 'bg-gray-800'} text-white`}>
-            <tr>
-              <th className="p-3 text-left whitespace-nowrap">#</th>
-              <th className="p-3 text-left whitespace-nowrap">Cédula</th>
-              <th className="p-3 text-left whitespace-nowrap">Nombres</th>
-              <th className="p-3 text-left whitespace-nowrap">Apellidos</th>
-              <th className="p-3 text-left whitespace-nowrap">Cargo</th>
-              <th className="p-3 text-left whitespace-nowrap">Cod. Cargo</th>
-              <th className="p-3 text-left whitespace-nowrap">Estatus</th>
-              <th className="p-3 text-center whitespace-nowrap">Acciones</th>
-            </tr>
-          </thead>
+          <thead className={`${isDark ? 'bg-gradient-to-r from-gray-700 to-gray-600' : 'bg-gradient-to-r from-gray-800 to-gray-700'} text-white`}>
+  <tr>
+    <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">#</th>
+    <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Cédula</th>
+    <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Nombres</th>
+    <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Apellidos</th>
+    <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Cargo</th>
+    <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Cod.</th>
+    <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Estatus</th>
+    <th className="p-3 text-center whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Acciones</th>
+  </tr>
+</thead>
           <tbody>
             {filteredPersonal.length === 0 ? (
               <tr><td colSpan={8} className={`text-center p-8 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No se encontraron empleados</td></tr>
             ) : (
               filteredPersonal.map((emp: any, index: number) => (
-                <tr key={emp.id_personal} className={`border-b transition-colors ${isDark ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'}`}>
+                <tr key={emp.id_personal} className={`border-b transition-colors duration-150 ${isDark ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-blue-50/30'}`}>
                   <td className="p-3 text-center whitespace-nowrap">{index + 1}</td>
-                  <td className={`p-3 whitespace-nowrap ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{emp.cedula}</td>
+                  <td className={`p-3 whitespace-nowrap font-mono ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{emp.cedula}</td>
                   <td className={`p-3 whitespace-nowrap ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{emp.nombres}</td>
                   <td className={`p-3 whitespace-nowrap ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{emp.apellidos}</td>
                   <td className="p-3 whitespace-nowrap">
@@ -325,14 +295,29 @@ const GestionPersonal = () => {
                     <span className={`px-2 py-1 rounded-full text-white text-xs ${emp.estatus === 'Activo' ? 'bg-green-500' : emp.estatus === 'Inactivo' ? 'bg-red-500' : 'bg-gray-500'}`}>{emp.estatus}</span>
                   </td>
                   <td className="p-3 whitespace-nowrap">
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      <button onClick={() => handleEdit(emp)} className="bg-yellow-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-yellow-600 transition whitespace-nowrap">✏️ Editar</button>
-                      {filtroEstatus === 'activo' ? (
-                        <button onClick={() => abrirModalEstatus(emp.id_personal, `${emp.nombres} ${emp.apellidos}`)} className="bg-orange-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-orange-600 transition whitespace-nowrap">🔄 Cambiar Estatus</button>
-                      ) : (
-                        <button onClick={() => cambiarEstatusDirecto(emp.id_personal, 'Activo', `${emp.nombres} ${emp.apellidos}`)} className="bg-green-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-green-600 transition whitespace-nowrap">🔄 Reactivar</button>
-                      )}
-                    </div>
+                    <div className="flex flex-wrap gap-1.5 justify-center">
+  <button 
+    onClick={() => handleEdit(emp)} 
+    className="bg-yellow-500 hover:bg-yellow-600 text-white px-2.5 py-1 rounded text-xs font-medium transition-all duration-200 hover:shadow-md whitespace-nowrap"
+  >
+    ✏️ Editar
+  </button>
+  {filtroEstatus === 'activo' ? (
+    <button 
+      onClick={() => abrirModalEstatus(emp.id_personal, `${emp.nombres} ${emp.apellidos}`)} 
+      className="bg-orange-500 hover:bg-orange-600 text-white px-2.5 py-1 rounded text-xs font-medium transition-all duration-200 hover:shadow-md whitespace-nowrap"
+    >
+      🔄 Estatus
+    </button>
+  ) : (
+    <button 
+      onClick={() => cambiarEstatusDirecto(emp.id_personal, 'Activo', `${emp.nombres} ${emp.apellidos}`)} 
+      className="bg-green-500 hover:bg-green-600 text-white px-2.5 py-1 rounded text-xs font-medium transition-all duration-200 hover:shadow-md whitespace-nowrap"
+    >
+      🔄 Reactivar
+    </button>
+  )}
+</div>
                   </td>
                 </tr>
               ))
@@ -775,7 +760,18 @@ const GestionUsuarios = () => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [usuarioAEliminar, setUsuarioAEliminar] = useState<number | null>(null);
-  const [formData, setFormData] = useState({ cedula: '', email: '', nombre: '', usuario: '', password: '', rol: 'admin' });
+  const [formData, setFormData] = useState({
+  cedula: '',
+  cedulaError: '',
+  email: '',
+  emailError: '',
+  nombre: '',
+  nombreError: '',
+  usuario: '',
+  password: '',
+  passwordError: '',
+  rol: 'admin'
+});
   
   const { theme } = useTheme();
   const isDark = theme === 'dark';
@@ -792,27 +788,51 @@ const GestionUsuarios = () => {
   useEffect(() => { fetchUsuarios(); }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (editingId) {
-        // ✅ CAMBIADO
-        await api.put(`/api/usuarios/${editingId}`, formData);
-        toast.success('Usuario actualizado');
-      } else {
-        // ✅ CAMBIADO
-        await api.post('/api/usuarios', formData);
-        toast.success('Usuario creado');
-      }
-      setShowModal(false); setEditingId(null); setFormData({ cedula: '', email: '', nombre: '', usuario: '', password: '', rol: 'admin' });
-      fetchUsuarios();
-    } catch (error) { toast.error('Error al guardar'); }
-  };
+  e.preventDefault();
+  try {
+    if (editingId) {
+      await api.put(`/api/usuarios/${editingId}`, formData);
+      toast.success('Usuario actualizado');
+    } else {
+      await api.post('/api/usuarios', formData);
+      toast.success('Usuario creado');
+    }
+    setShowModal(false);
+    setEditingId(null);
+    setFormData({
+      cedula: '',
+      cedulaError: '',
+      email: '',
+      emailError: '',
+      nombre: '',
+      nombreError: '',
+      usuario: '',
+      password: '',
+      passwordError: '',
+      rol: 'admin'
+    });
+    fetchUsuarios();
+  } catch (error) {
+    toast.error('Error al guardar');
+  }
+};
 
   const handleEdit = (user: any) => {
-    setEditingId(user.id);
-    setFormData({ cedula: user.cedula || '', email: user.email || '', nombre: user.nombre, usuario: user.usuario, password: '', rol: user.rol });
-    setShowModal(true);
-  };
+  setEditingId(user.id);
+  setFormData({
+    cedula: user.cedula || '',
+    cedulaError: '',      
+    email: user.email || '',
+    emailError: '',        
+    nombre: user.nombre,
+    nombreError: '',       
+    usuario: user.usuario,
+    password: '',
+    passwordError: '',     
+    rol: user.rol
+  });
+  setShowModal(true);
+};
 
   const confirmDelete = async () => {
     if (usuarioAEliminar) {
@@ -846,28 +866,105 @@ const GestionUsuarios = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>Listado de Usuarios</h2>
-        <button onClick={() => { setShowModal(true); setEditingId(null); setFormData({ cedula: '', email: '', nombre: '', usuario: '', password: '', rol: 'admin' }); }} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Nuevo Usuario</button>
-      </div>
+<button 
+  onClick={() => { 
+    setShowModal(true); 
+    setEditingId(null); 
+    setFormData({ 
+      cedula: '', 
+      cedulaError: '',    
+      email: '', 
+      emailError: '',      
+      nombre: '', 
+      nombreError: '',     
+      usuario: '', 
+      password: '', 
+      passwordError: '',   
+      rol: 'admin' 
+    }); 
+  }} 
+  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+>
+  + Nuevo Usuario
+</button>      </div>
 
       <div className="overflow-x-auto rounded-xl">
-        <table className={`min-w-full rounded-xl ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
-          <thead className={`${isDark ? 'bg-gray-700' : 'bg-gray-800'} text-white`}>
-            <tr><th className="p-3 whitespace-nowrap">#</th><th className="p-3 whitespace-nowrap">Cédula</th><th className="p-3 whitespace-nowrap">Email</th><th className="p-3 whitespace-nowrap">Nombre</th><th className="p-3 whitespace-nowrap">Usuario</th><th className="p-3 whitespace-nowrap">Rol</th><th className="p-3 whitespace-nowrap">Acciones</th></tr>
-          </thead>
-          <tbody>
-            {usuarios.map((user: any, index: number) => (
-              <tr key={user.id} className={`border-b transition-colors ${isDark ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'}`}>
-                <td className="p-3 text-center whitespace-nowrap">{index + 1}</td>
-                <td className={`p-3 whitespace-nowrap ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{user.cedula || '-'}</td>
-                <td className={`p-3 whitespace-nowrap ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{user.email || '-'}</td>
-                <td className={`p-3 whitespace-nowrap ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{user.nombre}</td>
-                <td className={`p-3 whitespace-nowrap ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{user.usuario}</td>
-                <td className="p-3 whitespace-nowrap"><span className={`px-2 py-1 rounded text-white text-sm ${user.rol === 'superadmin' ? 'bg-purple-500' : 'bg-blue-500'}`}>{user.rol}</span></td>
-                <td className="p-3 whitespace-nowrap"><button onClick={() => handleEdit(user)} className="bg-yellow-500 text-white px-3 py-1 rounded text-sm mr-2 hover:bg-yellow-600">Editar</button><button onClick={() => handleDelete(user.id)} className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">Eliminar</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <table className={`min-w-full rounded-xl overflow-hidden ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+  <thead className={`${isDark ? 'bg-gradient-to-r from-gray-700 to-gray-600' : 'bg-gradient-to-r from-gray-800 to-gray-700'} text-white`}>
+    <tr>
+      <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">#</th>
+      <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Cédula</th>
+      <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Email</th>
+      <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Nombre</th>
+      <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Usuario</th>
+      <th className="p-3 text-left whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Rol</th>
+      <th className="p-3 text-center whitespace-nowrap text-xs font-semibold uppercase tracking-wider">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {usuarios.length === 0 ? (
+      <tr>
+        <td colSpan={7} className={`p-8 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+          No hay usuarios registrados
+        </td>
+      </tr>
+    ) : (
+      usuarios.map((user: any, index: number) => (
+        <tr 
+          key={user.id} 
+          className={`border-b transition-colors duration-150 ${
+            isDark 
+              ? 'border-gray-700 hover:bg-gray-700/50' 
+              : 'border-gray-200 hover:bg-blue-50/30'
+          }`}
+        >
+          <td className={`p-3 whitespace-nowrap text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+            {index + 1}
+          </td>
+          <td className={`p-3 whitespace-nowrap text-sm font-mono ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+            {user.cedula || '-'}
+          </td>
+          <td className={`p-3 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+            {user.email || '-'}
+          </td>
+          <td className={`p-3 whitespace-nowrap text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>
+            {user.nombre}
+          </td>
+          <td className={`p-3 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+            <span className={`px-2 py-0.5 rounded text-xs font-mono ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>
+              {user.usuario}
+            </span>
+          </td>
+          <td className="p-3 whitespace-nowrap">
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+              user.rol === 'superadmin' 
+                ? 'bg-purple-300 text-purble-700 dark:bg-purple-900/30 dark:text-purple-500' 
+                : 'bg-blue-300 text-blue-300 dark:bg-blue-900/30 dark:text-blue-500'
+            }`}>
+              {user.rol === 'superadmin' ? 'Super Admin' : 'Admin'}
+            </span>
+          </td>
+          <td className="p-3 whitespace-nowrap">
+            <div className="flex items-center justify-center gap-1.5">
+              <button 
+                onClick={() => handleEdit(user)} 
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs font-medium transition-all duration-200 hover:shadow-md"
+              >
+                Editar
+              </button>
+              <button 
+                onClick={() => handleDelete(user.id)} 
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-medium transition-all duration-200 hover:shadow-md"
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      ))
+    )}
+  </tbody>
+</table>
       </div>
 
       {showConfirmModal && (
@@ -902,21 +999,113 @@ const GestionUsuarios = () => {
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Cédula</label>
-                <input type="text" className={`w-full p-2 border rounded ${isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'}`} value={formData.cedula} onChange={(e) => setFormData({...formData, cedula: e.target.value})} />
-              </div>
+  <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+    Cédula <span className="text-red-500">*</span>
+  </label>
+  <input 
+    type="text" 
+    inputMode="numeric"
+    className={`w-full p-2 border rounded ${
+      isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'
+    }`} 
+    value={formData.cedula} 
+    onChange={(e) => {
+      // Solo números, máximo 9 dígitos
+      const soloNumeros = e.target.value.replace(/\D/g, '').slice(0, 9);
+      setFormData({...formData, cedula: soloNumeros});
+    }}
+    placeholder="Ej: 28176143"
+    maxLength={9}
+    required
+  />
+  <p className="text-gray-400 text-xs mt-1">Solo números, entre 7 y 9 dígitos</p>
+</div>
               <div>
-                <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Correo Electrónico</label>
-                <input type="email" className={`w-full p-2 border rounded ${isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'}`} value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
-              </div>
+  <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+    Correo Electrónico <span className="text-red-500">*</span>
+  </label>
+  <input 
+    type="email" 
+    className={`w-full p-2 border rounded ${
+      formData.emailError 
+        ? 'border-red-500' 
+        : isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'
+    }`} 
+    value={formData.email} 
+    onChange={(e) => {
+      const email = e.target.value;
+      // Validar formato de email con regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailError = email && !emailRegex.test(email) 
+        ? 'Ingresa un correo electrónico válido (ej: usuario@dominio.com)' 
+        : '';
+      setFormData({
+        ...formData, 
+        email: email,
+        emailError: emailError
+      });
+    }}
+    placeholder="ejemplo@correo.com"
+    required 
+  />
+  {formData.emailError && (
+    <p className="text-red-500 text-sm mt-1">{formData.emailError}</p>
+  )}
+  <p className="text-gray-400 text-xs mt-1">Formato: usuario@dominio.com</p>
+</div>
               <div>
-                <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Nombre completo</label>
-                <input type="text" className={`w-full p-2 border rounded ${isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'}`} value={formData.nombre} onChange={(e) => setFormData({...formData, nombre: e.target.value})} required />
-              </div>
+  <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+    Nombre completo <span className="text-red-500">*</span>
+  </label>
+  <input 
+    type="text" 
+    className={`w-full p-2 border rounded ${
+      isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'
+    }`} 
+    value={formData.nombre} 
+    onChange={(e) => {
+      // Solo letras, espacios y acentos
+      const soloLetras = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+      setFormData({...formData, nombre: soloLetras});
+    }}
+    placeholder="Ej: Juan Pérez"
+    required 
+  />
+</div>
               <div>
-                <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Contraseña</label>
-                <input type="password" className={`w-full p-2 border rounded ${isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'}`} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required={!editingId} />
-              </div>
+  <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+    Contraseña {!editingId && <span className="text-red-500">*</span>}
+  </label>
+  <input 
+    type="password" 
+    className={`w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none transition ${
+      formData.passwordError 
+        ? 'border-red-500' 
+        : isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'
+    }`} 
+    value={formData.password} 
+    onChange={(e) => {
+      const password = e.target.value;
+      const passwordError = password.length > 0 && password.length < 6 
+        ? 'La contraseña debe tener al menos 6 caracteres' 
+        : '';
+      setFormData({
+        ...formData, 
+        password: password,
+        passwordError: passwordError
+      });
+    }}
+    required={!editingId}
+    placeholder={editingId ? 'Dejar vacío para mantener' : 'Mínimo 6 caracteres'}
+    minLength={6}
+  />
+  {formData.passwordError && (
+    <p className="text-red-500 text-sm mt-1">{formData.passwordError}</p>
+  )}
+  {!editingId && (
+    <p className="text-gray-400 text-xs mt-1">Mínimo 6 caracteres</p>
+  )}
+</div>
               <div>
                 <label className={`block mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Rol</label>
                 <select className={`w-full p-2 border rounded ${isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-300'}`} value={formData.rol} onChange={(e) => setFormData({...formData, rol: e.target.value})}>
